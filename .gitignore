@@ -1,0 +1,6 @@
+.vscode/*
+smb_common_v2
+teleop_twist_keyboard
+*/.idea/*
+.idea/*
+*/cmake-build-debug/*
