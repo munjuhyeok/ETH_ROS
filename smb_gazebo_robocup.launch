@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find smb_gazebo)/launch/smb_gazebo.launch">
+        <arg name="world_file" value="/usr/share/gazebo-11/worlds/robocup14_spl_field.world"/>
+    </include>
+    <node name="control" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" />
+</launch>
