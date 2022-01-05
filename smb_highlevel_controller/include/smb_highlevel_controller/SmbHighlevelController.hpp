@@ -2,6 +2,8 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
+#include <geometry_msgs/Twist.h>
+#include <visualization_msgs/Marker.h>
 
 namespace smb_highlevel_controller {
 
@@ -23,7 +25,12 @@ public:
 private:
 	ros::NodeHandle nodeHandle_;
 	ros::Subscriber subscriber;
+	ros::Publisher cmd_publisher;
+	ros::Publisher vis_publisher;
 	void scanCallback(const sensor_msgs::LaserScan& scan);
+	std::string topic_name;
+	int queue_size;
+	float p_gain;
 };
 
 } /* namespace */
