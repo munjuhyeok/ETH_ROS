@@ -14,10 +14,12 @@ SmbHighlevelController::SmbHighlevelController(ros::NodeHandle& nodeHandle) :
   if(!nodeHandle_.getParam("p_gain", p_gain)){
     ROS_ERROR("Could not find p_gain parameter!");
   }
+  stop=true;
 
   subscriber = nodeHandle_.subscribe(topic_name, queue_size, &SmbHighlevelController::scanCallback, this);
   cmd_publisher = nodeHandle_.advertise<geometry_msgs::Twist>("/cmd_vel",1);
   vis_publisher = nodeHandle_.advertise<visualization_msgs::Marker>("/visualization_marker",1);
+  service = nodeHandle_.advertiseService("/stop_smb", &SmbHighlevelController::stopCallback, this);
 }
 
 SmbHighlevelController::~SmbHighlevelController()
@@ -38,8 +40,13 @@ void SmbHighlevelController::scanCallback(const sensor_msgs::LaserScan& scan){
 
   float angle_diff = scan.angle_min + scan.angle_increment * min_index;
   geometry_msgs::Twist cmd_vel;
-  cmd_vel.linear.x = 1.0;
-  cmd_vel.angular.z = p_gain * angle_diff;
+  if(stop){
+    cmd_vel.linear.x = 0.0;
+    cmd_vel.angular.z = 0.0;
+  }else{
+    cmd_vel.linear.x = 1.0;
+    cmd_vel.angular.z = p_gain * angle_diff;
+  }
   cmd_publisher.publish(cmd_vel);
 
   visualization_msgs::Marker marker;
@@ -59,5 +66,18 @@ void SmbHighlevelController::scanCallback(const sensor_msgs::LaserScan& scan){
 
   vis_publisher.publish(marker);
 }
+
+bool SmbHighlevelController::stopCallback(std_srvs::SetBoolRequest& request, std_srvs::SetBoolResponse& response){
+  if(request.data == true){
+    stop = true;
+    response.message = "smb stopped";
+    ROS_INFO("smb stopped");
+  }else{
+    stop = false;
+    response.message = "smb started";
+    ROS_INFO("smb started");
+  }
+}
+
 
 } /* namespace */

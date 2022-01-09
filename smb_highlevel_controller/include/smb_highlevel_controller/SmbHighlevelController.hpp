@@ -4,6 +4,7 @@
 #include <sensor_msgs/LaserScan.h>
 #include <geometry_msgs/Twist.h>
 #include <visualization_msgs/Marker.h>
+#include <std_srvs/SetBool.h>
 
 namespace smb_highlevel_controller {
 
@@ -27,10 +28,13 @@ private:
 	ros::Subscriber subscriber;
 	ros::Publisher cmd_publisher;
 	ros::Publisher vis_publisher;
+	ros::ServiceServer service;
 	void scanCallback(const sensor_msgs::LaserScan& scan);
+	bool stopCallback(std_srvs::SetBoolRequest& request, std_srvs::SetBoolResponse& response);
 	std::string topic_name;
 	int queue_size;
 	float p_gain;
+	bool stop;
 };
 
 } /* namespace */

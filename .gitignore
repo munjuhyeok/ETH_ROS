@@ -6,3 +6,4 @@ teleop_twist_keyboard
 */cmake-build-debug/*
 build/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/progress.make
 build/*
+smb_highlevel_controller/bag/smb_navigation.bag
